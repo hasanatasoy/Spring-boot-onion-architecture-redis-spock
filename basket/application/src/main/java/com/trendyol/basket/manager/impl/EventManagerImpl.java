@@ -6,21 +6,18 @@ import com.trendyol.basket.externalservice.customer.CustomerService;
 import com.trendyol.basket.externalservice.customer.request.GetCustomerRequest;
 import com.trendyol.basket.externalservice.customer.response.GetCustomerResponse;
 import com.trendyol.basket.externalservice.notification.NotificationService;
-import com.trendyol.basket.externalservice.notification.request.NotificationProductInfoRequest;
-import com.trendyol.basket.externalservice.product.ProductService;
-import com.trendyol.basket.externalservice.product.model.request.GetProductRequest;
+import com.trendyol.basket.externalservice.notification.model.request.NotificationProductInfoRequest;
+import com.trendyol.basket.externalservice.notification.model.request.StockNotificationType;
 import com.trendyol.basket.manager.EventManager;
 import com.trendyol.basket.message.ProductPriceChangedMessage;
 import com.trendyol.basket.message.ProductStockChangedMessage;
 import com.trendyol.basket.services.BasketService;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Component
@@ -58,7 +55,12 @@ public class EventManagerImpl implements EventManager {
                 productPriceChangedMessage.getOldPrice(),
                 tempProduct.getTitle()
         );
-        sendEmailToCustomers(baskets, notificationProductInfoRequest);
+        var customerEmails = baskets.stream()
+                .map(Basket::getCustomerId)
+                .map(customerId -> customerService.get(new GetCustomerRequest(customerId)))
+                .map(GetCustomerResponse::getEmail)
+                .collect(Collectors.toList());
+        notificationService.sendEmailWhenPriceDrops(customerEmails, notificationProductInfoRequest);
     }
 
     @Override
@@ -79,7 +81,16 @@ public class EventManagerImpl implements EventManager {
                 tempProduct.getOldPrice(),
                 tempProduct.getTitle()
         );
-        sendEmailToCustomers(baskets, notificationProductInfoRequest);
+        var customerEmails = baskets.stream()
+                .map(Basket::getCustomerId)
+                .map(customerId -> customerService.get(new GetCustomerRequest(customerId)))
+                .map(GetCustomerResponse::getEmail)
+                .collect(Collectors.toList());
+        StockNotificationType stockType = StockNotificationType.Critic;
+        if(productStockChangedMessage.getQuantity() == 0){
+            stockType = StockNotificationType.UnAvaiable;
+        }
+        notificationService.sendEmailWhenStockIsCriticalOrUnAvaiable(customerEmails, notificationProductInfoRequest, stockType);
     }
 
     @NotNull
@@ -92,14 +103,5 @@ public class EventManagerImpl implements EventManager {
                 .filter(productInfo -> productInfo.getId() == productId)
                 .findFirst()
                 .get();
-    }
-
-    private void sendEmailToCustomers(List<Basket> baskets, NotificationProductInfoRequest notificationProductInfoRequest) {
-        var customerEmails = baskets.stream()
-                .map(Basket::getCustomerId)
-                .map(customerId -> customerService.get(new GetCustomerRequest(customerId)))
-                .map(GetCustomerResponse::getEmail)
-                .collect(Collectors.toList());
-        notificationService.sendEmailWhenPriceDrops(customerEmails, notificationProductInfoRequest);
     }
 }

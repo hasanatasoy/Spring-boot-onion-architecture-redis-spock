@@ -1,4 +1,4 @@
-package com.trendyol.basket.externalservice.notification.request;
+package com.trendyol.basket.externalservice.notification.model.request;
 
 import java.math.BigDecimal;
 

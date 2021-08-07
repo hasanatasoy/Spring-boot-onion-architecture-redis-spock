@@ -1,14 +1,14 @@
 package com.trendyol.notification;
 
 import com.trendyol.basket.externalservice.notification.NotificationService;
-import com.trendyol.basket.externalservice.notification.request.NotificationProductInfoRequest;
+import com.trendyol.basket.externalservice.notification.model.request.NotificationProductInfoRequest;
+import com.trendyol.basket.externalservice.notification.model.request.StockNotificationType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -21,10 +21,20 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     //TODO: Localization için bir şeyler düşün
+    //TODO: Type'a göre factory kullan, type'ı enum yap
     @Override
-    public void sendEmailWhenStockIsCritical(List<String> customerEmails, NotificationProductInfoRequest notificationProductInfo) {
-        var subject = "Kritik Stok Uyarısı";
-        var message = String.format("Sepetinizdeki %s ürünün stok adedi %d olmuştur. Acele edin kaçırmayın!",
+    public void sendEmailWhenStockIsCriticalOrUnAvaiable(List<String> customerEmails, NotificationProductInfoRequest notificationProductInfo, StockNotificationType type) {
+        String subject;
+        if(type.equals(StockNotificationType.Critic)){
+            subject = "Kritik Stok Uyarısı";
+        }
+        else if(type.equals(StockNotificationType.UnAvaiable)){
+            subject = "Sepetinizdeki ürünün stokları tükendi";
+        }
+        else{
+            subject = "Stok Uyarısı";
+        }
+        var message = String.format("Sepetinizdeki %s ürünün stok adedi %d olmuştur.Bilginize!",
                 notificationProductInfo.getTitle(),
                 notificationProductInfo.getQuantity()
         );
