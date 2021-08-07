@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setOldPrice(product.getOldPrice());
         productDTO.setTitle(product.getTitle());
         productDTO.setImageUrl(product.getImageUrl());
-        getProductResponse.setProductDTO(productDTO);
+        getProductResponse.setProductInfoDto(productDTO);
         return getProductResponse;
     }
 }

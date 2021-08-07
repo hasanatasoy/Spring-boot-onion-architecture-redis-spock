@@ -63,7 +63,7 @@ public class CampaignServiceImpl implements CampaignService {
         var getCampaignResponse = new GetCampaignResponse();
         var campaignDTOs = new ArrayList<CampaignDTO>();
         calculatedCampaignResponse.getCalculatedCampaigns().forEach(calculatedCampaign -> {
-            // TO DO: convert to campaignDTO
+            campaignDTOs.add(new CampaignDTO(calculatedCampaign.getName(), calculatedCampaign.getToBeAppliedPrice()));
         });
         getCampaignResponse.setCustomerId(getCampaignRequest.getCustomerId());
         getCampaignResponse.setCampaignDTOs(campaignDTOs);
