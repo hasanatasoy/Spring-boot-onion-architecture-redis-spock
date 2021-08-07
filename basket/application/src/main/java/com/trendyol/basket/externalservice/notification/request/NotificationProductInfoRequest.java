@@ -8,6 +8,15 @@ public class NotificationProductInfoRequest {
     private BigDecimal oldPrice;
     private String title;
 
+    public NotificationProductInfoRequest(){}
+
+    public NotificationProductInfoRequest(int quantity, BigDecimal price, BigDecimal oldPrice, String title) {
+        this.quantity = quantity;
+        this.price = price;
+        this.oldPrice = oldPrice;
+        this.title = title;
+    }
+
     public int getQuantity() {
         return quantity;
     }

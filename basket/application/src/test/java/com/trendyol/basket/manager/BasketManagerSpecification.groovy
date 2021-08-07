@@ -119,57 +119,57 @@ class BasketManagerSpecification extends Specification{
 
     def "When item updated then no exception thrown"(){
         setup:
-        def updateBasketRequest = new UpdateBasketRequest()
-        updateBasketRequest.setCustomerId(customerId)
-        updateBasketRequest.setProductId(productId)
-        updateBasketRequest.setQuantity(quantity)
-        def getProductResponse = new GetProductResponse(
-                new ProductInfoDTO(
-                        productId,
-                        imageUrl,
-                        title,
-                        quantity,
-                        price,
-                        oldPrice
-                )
-        )
-        def getProductResponseDTO = getProductResponse.getProductInfoDto()
-        def basket = new Basket(updateBasketRequest.getCustomerId(),
-                new ProductInfo(
+            def updateBasketRequest = new UpdateBasketRequest()
+            updateBasketRequest.setCustomerId(customerId)
+            updateBasketRequest.setProductId(productId)
+            updateBasketRequest.setQuantity(quantity)
+            def getProductResponse = new GetProductResponse(
+                    new ProductInfoDTO(
+                            productId,
+                            imageUrl,
+                            title,
+                            quantity,
+                            price,
+                            oldPrice
+                    )
+            )
+            def getProductResponseDTO = getProductResponse.getProductInfoDto()
+            def basket = new Basket(updateBasketRequest.getCustomerId(),
+                    new ProductInfo(
+                            getProductResponseDTO.getId(),
+                            getProductResponseDTO.getImageUrl(),
+                            getProductResponseDTO.getTitle(),
+                            getProductResponseDTO.getQuantity(),
+                            getProductResponseDTO.getPrice(),
+                            getProductResponseDTO.getOldPrice()
+                    ))
+
+            def productService = Mock(ProductService){
+                get(_ as GetProductRequest) >> getProductResponse
+            }
+            def basketService = Mock(BasketService) {
+                update(
+                        updateBasketRequest.getCustomerId(),
                         getProductResponseDTO.getId(),
-                        getProductResponseDTO.getImageUrl(),
-                        getProductResponseDTO.getTitle(),
-                        getProductResponseDTO.getQuantity(),
-                        getProductResponseDTO.getPrice(),
-                        getProductResponseDTO.getOldPrice()
-                ))
+                        getProductResponseDTO.getQuantity()
+                ) >> basket
+            }
+            def campaignService = Mock(CampaignService){
+                def campaignDTOs = new ArrayList<CampaignDTO>()
+                campaignDTOs.add(new CampaignDTO("Campaign", BigDecimal.valueOf(4.99)))
+                def getCampaignResponse = new GetCampaignResponse(basket.getCustomerId(), campaignDTOs)
+                get(_ as GetCampaignRequest) >> getCampaignResponse
+            }
 
-        def productService = Mock(ProductService){
-            get(_ as GetProductRequest) >> getProductResponse
-        }
-        def basketService = Mock(BasketService) {
-            update(
-                    updateBasketRequest.getCustomerId(),
-                    getProductResponseDTO.getId(),
-                    getProductResponseDTO.getQuantity()
-            ) >> basket
-        }
-        def campaignService = Mock(CampaignService){
-            def campaignDTOs = new ArrayList<CampaignDTO>()
-            campaignDTOs.add(new CampaignDTO("Campaign", BigDecimal.valueOf(4.99)))
-            def getCampaignResponse = new GetCampaignResponse(basket.getCustomerId(), campaignDTOs)
-            get(_ as GetCampaignRequest) >> getCampaignResponse
-        }
-
-        def basketManager = new BasketManagerImpl(
-                basketService,
-                productService,
-                campaignService,
-                updateBasketRequestValidator,
-                addToBasketRequestValidator,
-                getBasketRequestValidator,
-                basketDtoConverter,
-                campaignProductInfoDtoConverter)
+            def basketManager = new BasketManagerImpl(
+                    basketService,
+                    productService,
+                    campaignService,
+                    updateBasketRequestValidator,
+                    addToBasketRequestValidator,
+                    getBasketRequestValidator,
+                    basketDtoConverter,
+                    campaignProductInfoDtoConverter)
         when:
             basketManager.update(updateBasketRequest)
         then:
@@ -178,30 +178,30 @@ class BasketManagerSpecification extends Specification{
 
     def "When item get by customer id then no exception thrown"(){
         setup:
-        def getBasketRequest = new GetBasketRequest()
-        getBasketRequest.setCustomerId(customerId)
-        def basket = new Basket(customerId,
-                new ProductInfo(
-                        productId,
-                        imageUrl,
-                        title,
-                        quantity,
-                        price,
-                        oldPrice
-                )
-        )
-        def basketService = Mock(BasketService) {
-            get(getBasketRequest.getCustomerId()) >> basket
-        }
-        def basketManager = new BasketManagerImpl(
-                basketService,
-                null,
-                null,
-                updateBasketRequestValidator,
-                addToBasketRequestValidator,
-                getBasketRequestValidator,
-                basketDtoConverter,
-                campaignProductInfoDtoConverter)
+            def getBasketRequest = new GetBasketRequest()
+            getBasketRequest.setCustomerId(customerId)
+            def basket = new Basket(customerId,
+                    new ProductInfo(
+                            productId,
+                            imageUrl,
+                            title,
+                            quantity,
+                            price,
+                            oldPrice
+                    )
+            )
+            def basketService = Mock(BasketService) {
+                get(getBasketRequest.getCustomerId()) >> basket
+            }
+            def basketManager = new BasketManagerImpl(
+                    basketService,
+                    null,
+                    null,
+                    updateBasketRequestValidator,
+                    addToBasketRequestValidator,
+                    getBasketRequestValidator,
+                    basketDtoConverter,
+                    campaignProductInfoDtoConverter)
         when:
             basketManager.get(getBasketRequest)
         then:

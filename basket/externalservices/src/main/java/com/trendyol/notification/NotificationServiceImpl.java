@@ -5,14 +5,16 @@ import com.trendyol.basket.externalservice.notification.request.NotificationProd
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.function.Consumer;
 
+@Service
 public class NotificationServiceImpl implements NotificationService {
     @Value("${sender.email:placeholder}")
     private String senderEmail;
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
     public NotificationServiceImpl(JavaMailSender javaMailSender){
         this.javaMailSender = javaMailSender;
