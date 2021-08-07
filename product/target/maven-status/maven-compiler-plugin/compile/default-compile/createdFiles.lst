@@ -1,0 +1,13 @@
+com\trendyol\product\base\ApiResponse$ApiResponseBuilderWithData.class
+com\trendyol\product\model\UpdatePriceRequest.class
+com\trendyol\product\domain\ProductRepository.class
+com\trendyol\product\base\ApiResponse$ApiResponseBuilder.class
+com\trendyol\product\ProductApplication.class
+com\trendyol\product\exception\BadRequestException.class
+com\trendyol\product\controller\ProductController.class
+com\trendyol\product\service\impl\ProductServiceImpl.class
+com\trendyol\product\base\ApiResponse.class
+com\trendyol\product\exception\ProductNotFoundException.class
+com\trendyol\product\domain\Product.class
+com\trendyol\product\model\UpdateStockRequest.class
+com\trendyol\product\service\ProductService.class
