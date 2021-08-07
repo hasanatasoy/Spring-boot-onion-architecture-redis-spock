@@ -60,15 +60,15 @@ public class BasketManagerImpl implements BasketManager {
         addToBasketRequestValidator.validate(addToBasketRequest);
         var getProductRequest = new GetProductRequest(addToBasketRequest.getProductId());
         var productResponse = productService.get(getProductRequest);
-        validateProductStock(productResponse.getProductDTO().getQuantity(), addToBasketRequest.getQuantity());
+        validateProductStock(productResponse.getProductInfoDto().getQuantity(), addToBasketRequest.getQuantity());
         var basket = basketService.add(
                 addToBasketRequest.getCustomerId(),
-                productResponse.getProductDTO().getId(),
-                productResponse.getProductDTO().getImageUrl(),
-                productResponse.getProductDTO().getTitle(),
-                productResponse.getProductDTO().getQuantity(),
-                productResponse.getProductDTO().getPrice(),
-                productResponse.getProductDTO().getOldPrice());
+                productResponse.getProductInfoDto().getId(),
+                productResponse.getProductInfoDto().getImageUrl(),
+                productResponse.getProductInfoDto().getTitle(),
+                productResponse.getProductInfoDto().getQuantity(),
+                productResponse.getProductInfoDto().getPrice(),
+                productResponse.getProductInfoDto().getOldPrice());
         var getCampaignRequest = prepareGetCampaignRequest(basket.getCustomerId(), basket.getProducts());
         var campaignResponse = campaignService.get(getCampaignRequest);
         UpdateBasketInfoWithCampaign(campaignResponse);
@@ -80,7 +80,7 @@ public class BasketManagerImpl implements BasketManager {
         updateBasketRequestValidator.validate(updateBasketRequest);
         var getProductRequest = new GetProductRequest(updateBasketRequest.getProductId());
         var productResponse = productService.get(getProductRequest);
-        validateProductStock(productResponse.getProductDTO().getQuantity(), updateBasketRequest.getQuantity());
+        validateProductStock(productResponse.getProductInfoDto().getQuantity(), updateBasketRequest.getQuantity());
         var basket = basketService.update(
                 updateBasketRequest.getCustomerId(),
                 updateBasketRequest.getProductId(),

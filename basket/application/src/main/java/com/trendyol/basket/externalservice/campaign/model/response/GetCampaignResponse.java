@@ -8,6 +8,13 @@ public class GetCampaignResponse {
     private long customerId;
     private List<CampaignDTO> campaignDTOs;
 
+    public GetCampaignResponse(){}
+
+    public GetCampaignResponse(long customerId, List<CampaignDTO> campaignDTOs) {
+        this.customerId = customerId;
+        this.campaignDTOs = campaignDTOs;
+    }
+
     public long getCustomerId() {
         return customerId;
     }

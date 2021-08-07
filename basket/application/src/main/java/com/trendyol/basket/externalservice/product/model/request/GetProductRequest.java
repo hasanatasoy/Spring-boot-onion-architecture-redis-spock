@@ -4,6 +4,7 @@ public class GetProductRequest {
 
     private long productId;
 
+    public GetProductRequest() {}
     public GetProductRequest(long productId) {
         this.productId = productId;
     }
