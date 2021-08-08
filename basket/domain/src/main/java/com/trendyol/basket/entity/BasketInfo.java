@@ -22,6 +22,22 @@ public class BasketInfo {
         basketCampaigns = new ArrayList<>();
     }
 
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public void setGrandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
+    }
+
+    public List<BasketCampaign> getBasketCampaigns() {
+        return basketCampaigns;
+    }
+
+    public void setBasketCampaigns(List<BasketCampaign> basketCampaigns) {
+        this.basketCampaigns = basketCampaigns;
+    }
+
     public BigDecimal getSubTotal() {
         return subTotal;
     }

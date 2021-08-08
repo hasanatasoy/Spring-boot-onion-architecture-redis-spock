@@ -16,8 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    @Value("${services.product.url}")
-    private String productServiceUrl;
+    private String productServiceUrl = "http://localhost::8082";
     private final RestTemplate restTemplate;
 
     public ProductServiceImpl(RestTemplate restTemplate){

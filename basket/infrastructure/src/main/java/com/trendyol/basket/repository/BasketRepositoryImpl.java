@@ -1,24 +1,43 @@
 package com.trendyol.basket.repository;
 
 import com.trendyol.basket.entity.Basket;
-import org.springframework.stereotype.Repository;
+import com.trendyol.basket.entity.BasketsIdsByProductId;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class BasketRepositoryImpl implements BasketRepository{
+@Component
+public class BasketRepositoryImpl implements BasketRepository {
+
+    private final BasketRedisRepository basketRedisRepository;
+    private final BasketsIdsByProductIdRepository basketsIdsByProductIdRepository;
+
+    public BasketRepositoryImpl(
+            BasketRedisRepository basketRedisRepository,
+            BasketsIdsByProductIdRepository basketsIdsByProductIdRepository) {
+        this.basketRedisRepository = basketRedisRepository;
+        this.basketsIdsByProductIdRepository = basketsIdsByProductIdRepository;
+    }
+
+
     @Override
     public Optional<Basket> findByCustomerId(long customerId) {
-        return Optional.empty();
+        return basketRedisRepository.findById(customerId);
     }
 
     @Override
     public void save(Basket basket) {
+        basketRedisRepository.save(basket);
     }
 
     @Override
-    public Optional<List<Basket>> findByProductId(long productId) {
-        return Optional.empty();
+    public Optional<BasketsIdsByProductId> findByProductId(long productId) {
+        return basketsIdsByProductIdRepository.findById(productId);
+    }
+
+    @Override
+    public void saveProductBaskets(BasketsIdsByProductId basketsIdsByProductId) {
+        basketsIdsByProductIdRepository.save(basketsIdsByProductId);
     }
 }

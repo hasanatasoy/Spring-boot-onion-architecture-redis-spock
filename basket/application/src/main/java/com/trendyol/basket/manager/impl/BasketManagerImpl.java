@@ -12,6 +12,7 @@ import com.trendyol.basket.externalservice.product.model.request.GetProductReque
 import com.trendyol.basket.manager.BasketManager;
 import com.trendyol.basket.model.request.AddToBasketRequest;
 import com.trendyol.basket.model.request.GetBasketRequest;
+import com.trendyol.basket.model.request.GetBasketsByProductIdRequest;
 import com.trendyol.basket.model.request.UpdateBasketRequest;
 import com.trendyol.basket.model.response.AddToBasketResponse;
 import com.trendyol.basket.model.response.GetBasketResponse;
@@ -118,5 +119,16 @@ public class BasketManagerImpl implements BasketManager {
         var basket = basketService.get(getBasketRequest.getCustomerId());
         var basketDTO = basketDtoConverter.convert(basket);
         return new GetBasketResponse(basketDTO);
+    }
+
+    @Override
+    public List<GetBasketResponse> getByProductId(GetBasketsByProductIdRequest getBasketsByProductIdRequest) {
+        //validate request
+        var baskets = basketService.getByProductId(getBasketsByProductIdRequest.getProductId());
+        var basketResponses = baskets.stream()
+                .map(basketDtoConverter::convert)
+                .map(GetBasketResponse::new)
+                .collect(Collectors.toList());
+        return basketResponses;
     }
 }

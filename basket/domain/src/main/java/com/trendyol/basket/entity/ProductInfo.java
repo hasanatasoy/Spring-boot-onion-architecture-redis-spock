@@ -32,6 +32,26 @@ public class ProductInfo {
         this.oldPrice = oldPrice;
     }
 
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setOldPrice(BigDecimal oldPrice) {
+        this.oldPrice = oldPrice;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public long getId() {
         return id;
     }

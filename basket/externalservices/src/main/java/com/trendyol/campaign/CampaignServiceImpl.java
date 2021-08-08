@@ -25,8 +25,7 @@ import java.util.ArrayList;
 @Service
 public class CampaignServiceImpl implements CampaignService {
 
-    @Value("${services.campaign.url}")
-    private String campaignServiceUrl;
+    private String campaignServiceUrl = "http://localhost::8081";
     private final RestTemplate restTemplate;
 
     public CampaignServiceImpl(RestTemplate restTemplate){

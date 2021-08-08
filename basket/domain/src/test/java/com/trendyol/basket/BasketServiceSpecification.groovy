@@ -1,6 +1,7 @@
 package com.trendyol.basket
 
 import com.trendyol.basket.entity.Basket
+import com.trendyol.basket.entity.BasketsIdsByProductId
 import com.trendyol.basket.entity.ProductInfo
 import com.trendyol.basket.exception.BasketNotFoundException
 import com.trendyol.basket.exception.ProductNotFoundException
@@ -21,6 +22,7 @@ class BasketServiceSpecification extends Specification{
             def oldPrice = BigDecimal.valueOf(150)
             def basketRepository = Mock(BasketRepository) {
                 findByCustomerId(customerId) >> Optional.empty()
+                findByProductId(productId) >> Optional.empty()
             }
             def basketService = new BasketServiceImpl(basketRepository)
         when:
@@ -49,6 +51,10 @@ class BasketServiceSpecification extends Specification{
             def oldPrice = BigDecimal.valueOf(150)
             def basket = new Basket(customerId, new ProductInfo(productId, imageUrl, title, quantity, price, oldPrice))
             def basketRepository = Mock(BasketRepository) {
+                def basketIds = new HashSet<BasketsIdsByProductId>()
+                basketIds.add(customerId)
+                def basketIdsByProductId = new BasketsIdsByProductId(productId, basketIds)
+                findByProductId(productId) >> Optional.of(basketIdsByProductId)
                 findByCustomerId(customerId) >> Optional.of(basket)
             }
             def basketService = new BasketServiceImpl(basketRepository)
@@ -75,6 +81,10 @@ class BasketServiceSpecification extends Specification{
             def productTwoOldPrice = BigDecimal.valueOf(288)
             def basket = new Basket(customerId, new ProductInfo(productOneId, imageUrl, title, productOneQuantity, productOnePrice, productOneOldPrice))
             def basketRepository = Mock(BasketRepository) {
+                def basketIds = new HashSet<BasketsIdsByProductId>()
+                basketIds.add(customerId)
+                def basketIdsByProductId = new BasketsIdsByProductId(productTwoId, basketIds)
+                findByProductId(productTwoId) >> Optional.of(basketIdsByProductId)
                 findByCustomerId(customerId) >> Optional.of(basket)
             }
             def basketService = new BasketServiceImpl(basketRepository)
@@ -118,6 +128,10 @@ class BasketServiceSpecification extends Specification{
             def basket = new Basket(customerId,
                     new ProductInfo(productId, "imageUrl", "title", quantity, existsProductPrice, BigDecimal.valueOf(155)))
             def basketRepository = Mock(BasketRepository) {
+                def basketIds = new HashSet<BasketsIdsByProductId>()
+                basketIds.add(customerId)
+                def basketIdsByProductId = new BasketsIdsByProductId(productId, basketIds)
+                findByProductId(productId) >> Optional.of(basketIdsByProductId)
                 findByCustomerId(customerId) >> Optional.of(basket)
             }
             def basketService = new BasketServiceImpl(basketRepository)
@@ -258,10 +272,14 @@ class BasketServiceSpecification extends Specification{
             def productId = 1L
             def basket = new Basket(1L,
                     new ProductInfo(productId, "imageUrl", "title", 2, BigDecimal.valueOf(111), BigDecimal.valueOf(233)))
+            def basketIds = new HashSet<Long>()
+            basketIds.add(1L)
+            def basketIdsByProductId = new BasketsIdsByProductId(productId, basketIds)
             def baskets = new ArrayList<Basket>();
             baskets.add(basket);
             def basketRepository = Mock(BasketRepository) {
-                findByProductId(productId) >> Optional.of(baskets)
+                findByProductId(productId) >> Optional.of(basketIdsByProductId)
+                findByCustomerId(1L) >> Optional.of(basket)
             }
             def basketService = new BasketServiceImpl(basketRepository)
         when:

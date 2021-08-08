@@ -2,16 +2,20 @@ package com.trendyol.basket.entity;
 
 import com.trendyol.basket.exception.BasketValidationException;
 import com.trendyol.basket.exception.ProductNotFoundException;
-import com.trendyol.basket.exception.ProductValidationException;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@RedisHash("Basket")
 public class Basket {
+    @Id
     private long customerId;
     private List<ProductInfo> products;
     private BasketInfo basketInfo;
+
+    public Basket(){}
 
     public Basket(long customerId, ProductInfo product){
         var isBasketFieldsNotValid = false;
@@ -24,6 +28,18 @@ public class Basket {
         this.products = new ArrayList<>();
         products.add(product);
         basketInfo = new BasketInfo(products);
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setProducts(List<ProductInfo> products) {
+        this.products = products;
+    }
+
+    public void setBasketInfo(BasketInfo basketInfo) {
+        this.basketInfo = basketInfo;
     }
 
     public long getCustomerId() {

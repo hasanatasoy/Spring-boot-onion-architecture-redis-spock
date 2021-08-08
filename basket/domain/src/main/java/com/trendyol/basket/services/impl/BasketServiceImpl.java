@@ -1,6 +1,7 @@
 package com.trendyol.basket.services.impl;
 
 import com.trendyol.basket.entity.Basket;
+import com.trendyol.basket.entity.BasketsIdsByProductId;
 import com.trendyol.basket.entity.ProductInfo;
 import com.trendyol.basket.exception.BasketNotFoundException;
 import com.trendyol.basket.repository.BasketRepository;
@@ -9,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BasketServiceImpl implements BasketService {
@@ -41,6 +45,7 @@ public class BasketServiceImpl implements BasketService {
                 basket.setProductQuantity(existProductInfo.getId(), existProductInfo.getQuantity() + quantity);
             }
         }
+        SaveBasketIdsByProductId(customerId, productId);
         basketRepository.save(basket);
         return basket;
     }
@@ -52,8 +57,23 @@ public class BasketServiceImpl implements BasketService {
             throw new BasketNotFoundException();
         var basket = optionalBasket.get();
         basket.setProductQuantity(productId, quantity);
-        basketRepository.save(basket);
+        SaveBasketIdsByProductId(customerId, productId);
         return basket;
+    }
+
+    private void SaveBasketIdsByProductId(long customerId, long productId) {
+        var optBasketIdsByProductId = basketRepository.findByProductId(productId);
+        BasketsIdsByProductId basketsIdsByProductId;
+        if(optBasketIdsByProductId.isPresent()){
+            basketsIdsByProductId = optBasketIdsByProductId.get();
+            basketsIdsByProductId.getBasketIds().add(productId);
+        }
+        else{
+            var basketIds = new HashSet<Long>();
+            basketIds.add(customerId);
+            basketsIdsByProductId = new BasketsIdsByProductId(productId, basketIds);
+        }
+        basketRepository.saveProductBaskets(basketsIdsByProductId);
     }
 
     @Override
@@ -85,14 +105,16 @@ public class BasketServiceImpl implements BasketService {
 
     @Override
     public List<Basket> getByProductId(long productId) {
-        var optionalBaskets = basketRepository.findByProductId(productId);
-        List<Basket> baskets;
-        if(optionalBaskets.isEmpty()){
-            baskets = new ArrayList<>();
+        var optionalBasketsIdsByProductId = basketRepository.findByProductId(productId);
+        if(optionalBasketsIdsByProductId.isEmpty()){
+            return new ArrayList<>();
         }
-        else{
-            baskets = optionalBaskets.get();
-        }
+        var basketsIdsByProductId = optionalBasketsIdsByProductId.get();
+        var baskets = new ArrayList<Basket>();
+        basketsIdsByProductId.getBasketIds().stream().forEach(basketId -> {
+            var optBasket = basketRepository.findByCustomerId(basketId);
+            optBasket.ifPresent(baskets::add);
+        });
         return baskets;
     }
 }
