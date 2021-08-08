@@ -9,7 +9,8 @@
 4- Sepetteki ürünü silebilmek için &nbsp;&nbsp;**POST basket/delete**&nbsp;&nbsp;(Sepetin ara toplamı hesaplanıyor ve kampanya servisine sorgu atılıyor<br/>  
 5- Sepetteki ürünleri çekebilmek için  &nbsp;&nbsp;**POST basket/{customerId}**<br/>  
 6- Kampanya servisine başlangıçta bir kargo kampanyası eklenmeli.&nbsp;&nbsp;**POST campaign/create**<br/>  
-6- Ürün servisi ayağa kaldırıldığında 100 adet ürün rastgele değerler ile ekleniyor.
+7- Ürün servisi ayağa kaldırıldığında 100 adet ürün rastgele değerler ile ekleniyor.<br/>  
+8- Mailleri alabilmek için sepet servisi içerisinde, externalservices içindeki customerServiceImpl'a gidilmeli ve mail değiştirilmeli
 
   
 ## Kurulum
