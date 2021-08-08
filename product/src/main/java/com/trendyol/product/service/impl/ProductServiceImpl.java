@@ -7,18 +7,27 @@ import com.trendyol.product.exception.ProductNotFoundException;
 import com.trendyol.product.message.PriceChangedMessage;
 import com.trendyol.product.message.StockChangedMessage;
 import com.trendyol.product.service.ProductService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    @Value(value = "${pricechanged.topic.name}")
+    private String priceChangedTopicName;
+    @Value(value = "${stockchanged.topic.name}")
+    private String stockChangedTopicName;
     private final ProductRepository productRepository;
+    private final KafkaTemplate kafkaTemplate;
 
-    public ProductServiceImpl(ProductRepository productRepository){
+    public ProductServiceImpl(
+            ProductRepository productRepository,
+            KafkaTemplate kafkaTemplate){
         this.productRepository = productRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
@@ -66,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
         priceChangedMessage.setPrice(price);
         priceChangedMessage.setOldPrice(oldPrice);
         priceChangedMessage.setProductId(productId);
-        //TO DO: send message to message broker
+        kafkaTemplate.send(priceChangedTopicName, priceChangedMessage);
     }
 
     @Override
@@ -75,6 +84,6 @@ public class ProductServiceImpl implements ProductService {
         stockChangedMessage.setProductId(productId);
         stockChangedMessage.setQuantity(quantity);
         stockChangedMessage.setOldQuantity(oldQuantity);
-        //TO DO: send message to message broker
+        kafkaTemplate.send(stockChangedTopicName, stockChangedMessage);
     }
 }
