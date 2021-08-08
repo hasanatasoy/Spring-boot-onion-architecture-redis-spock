@@ -36,3 +36,4 @@ docker container run --name rediscik -p 6379:6379 -d redis
 ```
 Postman istekleri repoya dahil edildi
 ```
+![alt text](https://raw.githubusercontent.com/hasanatasoy/trendy-final/master/architecture.png?token=AFQI7C23ADKVHBXMID3U27DBCAT76)
