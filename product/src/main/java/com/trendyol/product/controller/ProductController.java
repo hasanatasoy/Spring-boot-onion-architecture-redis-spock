@@ -33,8 +33,8 @@ public class ProductController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ApiResponse get(@PathVariable long productId){
-        var product = productService.get(productId);
+    public ApiResponse get(@PathVariable long id){
+        var product = productService.get(id);
         return ApiResponse.ApiResponseBuilderWithData
                 .builder()
                 .setData(product)
