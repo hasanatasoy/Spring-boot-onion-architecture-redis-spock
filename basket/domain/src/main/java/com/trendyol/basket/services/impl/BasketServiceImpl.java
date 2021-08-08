@@ -3,6 +3,7 @@ package com.trendyol.basket.services.impl;
 import com.trendyol.basket.entity.Basket;
 import com.trendyol.basket.entity.BasketsIdsByProductId;
 import com.trendyol.basket.entity.ProductInfo;
+import com.trendyol.basket.exception.BasketIdsByProductIdNotFoundException;
 import com.trendyol.basket.exception.BasketNotFoundException;
 import com.trendyol.basket.repository.BasketRepository;
 import com.trendyol.basket.services.BasketService;
@@ -45,7 +46,7 @@ public class BasketServiceImpl implements BasketService {
                 basket.setProductQuantity(existProductInfo.getId(), existProductInfo.getQuantity() + quantity);
             }
         }
-        SaveBasketIdsByProductId(customerId, productId);
+        saveBasketIdsByProductId(customerId, productId);
         basketRepository.save(basket);
         return basket;
     }
@@ -58,11 +59,11 @@ public class BasketServiceImpl implements BasketService {
         var basket = optionalBasket.get();
         basket.setProductQuantity(productId, quantity);
         basketRepository.save(basket);
-        SaveBasketIdsByProductId(customerId, productId);
+        saveBasketIdsByProductId(customerId, productId);
         return basket;
     }
 
-    private void SaveBasketIdsByProductId(long customerId, long productId) {
+    private void saveBasketIdsByProductId(long customerId, long productId) {
         var optBasketIdsByProductId = basketRepository.findByProductId(productId);
         BasketsIdsByProductId basketsIdsByProductId;
         if(optBasketIdsByProductId.isPresent()){
@@ -128,6 +129,18 @@ public class BasketServiceImpl implements BasketService {
         var basket = optionalBasketsIdsByProductId.get();
         basket.setProductQuantity(productId, 0);
         basketRepository.save(basket);
+        deleteBasketIdFromBasketIdsByProductId(customerId, productId);
         return basket;
+    }
+
+    private void deleteBasketIdFromBasketIdsByProductId(long customerId, long productId) {
+        var optBasketIdsByProductId = basketRepository.findByProductId(productId);
+        BasketsIdsByProductId basketsIdsByProductId;
+        if(!optBasketIdsByProductId.isPresent()){
+            throw new BasketIdsByProductIdNotFoundException();
+        }
+        basketsIdsByProductId = optBasketIdsByProductId.get();
+        basketsIdsByProductId.getBasketIds().remove(customerId);
+        basketRepository.saveProductBaskets(basketsIdsByProductId);
     }
 }

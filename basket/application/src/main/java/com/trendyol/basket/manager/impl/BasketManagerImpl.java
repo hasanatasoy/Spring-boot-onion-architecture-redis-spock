@@ -65,7 +65,7 @@ public class BasketManagerImpl implements BasketManager {
                 productResponse.getProductInfoDto().getId(),
                 productResponse.getProductInfoDto().getImageUrl(),
                 productResponse.getProductInfoDto().getTitle(),
-                productResponse.getProductInfoDto().getQuantity(),
+                addToBasketRequest.getQuantity(),
                 productResponse.getProductInfoDto().getPrice(),
                 productResponse.getProductInfoDto().getOldPrice());
         var getCampaignRequest = prepareGetCampaignRequest(basket.getCustomerId(), basket.getProducts());
