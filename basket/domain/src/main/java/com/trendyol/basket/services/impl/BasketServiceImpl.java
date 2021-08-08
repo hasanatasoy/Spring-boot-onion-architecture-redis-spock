@@ -57,6 +57,7 @@ public class BasketServiceImpl implements BasketService {
             throw new BasketNotFoundException();
         var basket = optionalBasket.get();
         basket.setProductQuantity(productId, quantity);
+        basketRepository.save(basket);
         SaveBasketIdsByProductId(customerId, productId);
         return basket;
     }

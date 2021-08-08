@@ -16,6 +16,7 @@ import com.trendyol.basket.model.dto.BasketDTO;
 import com.trendyol.basket.model.request.GetBasketsByProductIdRequest;
 import com.trendyol.basket.model.response.GetBasketResponse;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -43,8 +44,11 @@ public class ProductStockChangedConsumer implements Consumer<ProductStockChanged
     @Override
     @KafkaListener(topics = "ProductStockChanged", groupId = "basket",
             containerFactory = "getProductStockChangedListenerFactory")
-    public void consume(ProductStockChangedMessage productStockChangedMessage) {
+    public void consume(@Payload ProductStockChangedMessage productStockChangedMessage) {
         if(productStockChangedMessage.getQuantity() > notificationStockChangeLimit){
+            return;
+        }
+        if(productStockChangedMessage.getOldQuantity() < productStockChangedMessage.getQuantity()){
             return;
         }
         var baskets = basketManager.getByProductId(new GetBasketsByProductIdRequest(productStockChangedMessage.getProductId()));
