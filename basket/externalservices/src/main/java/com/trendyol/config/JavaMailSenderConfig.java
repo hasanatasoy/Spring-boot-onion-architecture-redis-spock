@@ -1,5 +1,6 @@
 package com.trendyol.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,15 +10,21 @@ import java.util.Properties;
 
 @Configuration
 public class JavaMailSenderConfig {
-    //TODO: mail sender'ı değiştir
+
+    //TODO:email credentials
+    /*@Value("${spring.mail.username")
+    private String senderEmail;
+    @Value("${spring.mail.username")
+    private String senderPassword;*/
+
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("my.gmail@gmail.com");
-        mailSender.setPassword("password");
+        mailSender.setUsername("droppler.ty@gmail.com");
+        mailSender.setPassword("trendyol123");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

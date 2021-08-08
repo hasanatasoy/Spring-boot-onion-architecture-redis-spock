@@ -12,8 +12,8 @@ import java.util.List;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
-    @Value("${sender.email:placeholder}")
-    private String senderEmail;
+    //@Value(value = "${spring.mail.username}")
+    private String senderEmail = "droppler.ty@gmail.com";
     private final JavaMailSender javaMailSender;
 
     public NotificationServiceImpl(JavaMailSender javaMailSender){
@@ -34,10 +34,7 @@ public class NotificationServiceImpl implements NotificationService {
         else{
             subject = "Stok Uyarısı";
         }
-        var message = String.format("Sepetinizdeki %s ürünün stok adedi %d olmuştur.Bilginize!",
-                notificationProductInfo.getTitle(),
-                notificationProductInfo.getQuantity()
-        );
+        var message = "Sepetinizdeki "+notificationProductInfo.getTitle()+" isimli ürünün stok adedi "+notificationProductInfo.getQuantity()+" olmuştur.Bilginize!";
         customerEmails.forEach(customerEmail -> {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setFrom(senderEmail);
@@ -51,7 +48,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendEmailWhenPriceDrops(List<String> customerEmails, NotificationProductInfoRequest notificationProductInfo) {
         var subject = "Fiyat düştü kaçırmayın!";
-        var message = "Sepetinizdeki "+ notificationProductInfo.getTitle()+" ürünün fiyatı düşmüştür. " +
+        var message = "Sepetinizdeki "+ notificationProductInfo.getTitle()+" isimli ürünün fiyatı düşmüştür. " +
                 "Eski fiyat: "+notificationProductInfo.getOldPrice()+ " " +
                 "Yeni fiyat: "+notificationProductInfo.getPrice();
         customerEmails.forEach(customerEmail -> {

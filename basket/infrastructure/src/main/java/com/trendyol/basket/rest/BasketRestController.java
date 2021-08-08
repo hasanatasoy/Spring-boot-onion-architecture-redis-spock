@@ -25,9 +25,8 @@ public class BasketRestController implements BasketController {
     @Override
     public ApiResponse<AddToBasketResponse> add(@RequestBody AddToBasketRequest addToBasketRequest) {
         var response = basketManager.add(addToBasketRequest);
-        return ApiResponse.ApiResponseBuilderWithData
+        return ApiResponse.ApiResponseBuilder
                 .builder()
-                .setData(response)
                 .build();
     }
 
@@ -35,9 +34,8 @@ public class BasketRestController implements BasketController {
     @Override
     public ApiResponse<UpdateBasketResponse> update(@RequestBody UpdateBasketRequest updateBasketRequest) {
         var response = basketManager.update(updateBasketRequest);
-        return ApiResponse.ApiResponseBuilderWithData
+        return ApiResponse.ApiResponseBuilder
                 .builder()
-                .setData(response)
                 .build();
     }
 

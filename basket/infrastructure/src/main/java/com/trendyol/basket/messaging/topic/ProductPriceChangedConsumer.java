@@ -14,6 +14,7 @@ import com.trendyol.basket.model.dto.BasketDTO;
 import com.trendyol.basket.model.request.GetBasketsByProductIdRequest;
 import com.trendyol.basket.model.response.GetBasketResponse;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class ProductPriceChangedConsumer implements Consumer<ProductPriceChanged
     @Override
     @KafkaListener(topics = "ProductPriceChanged", groupId = "basket",
             containerFactory = "getProductPriceChangedFactory")
-    public void consume(ProductPriceChangedMessage productPriceChangedMessage) {
+    public void consume(@Payload ProductPriceChangedMessage productPriceChangedMessage) {
         if(productPriceChangedMessage.getPrice().compareTo(productPriceChangedMessage.getOldPrice()) > 0){
             return;
         }
