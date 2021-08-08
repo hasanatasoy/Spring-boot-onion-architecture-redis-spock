@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private String productServiceUrl = "http://localhost::8082";
+    private String productServiceUrl = "http://localhost:8080/product";
     private final RestTemplate restTemplate;
 
     public ProductServiceImpl(RestTemplate restTemplate){
@@ -25,23 +25,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public GetProductResponse get(GetProductRequest getProductRequest) {
-        var url = productServiceUrl + "/" + getProductRequest.getProductId();
-        var response = restTemplate
-                .exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<ApiResponse<Product>>(){});
-        var apiResponse = response.getBody();
-        if(apiResponse != null || !apiResponse.isSuccess()){
+        try{
+            var url = productServiceUrl + "/" + getProductRequest.getProductId();
+            var response = restTemplate
+                    .exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<ApiResponse<Product>>(){});
+            var apiResponse = response.getBody();
+            if(apiResponse == null || !apiResponse.isSuccess()){
+                throw new GetProductException();
+            }
+            var product = apiResponse.getData();
+            var getProductResponse = new GetProductResponse();
+            var productDTO = new ProductInfoDTO();
+            productDTO.setId(product.getId());
+            productDTO.setQuantity(product.getQuantity());
+            productDTO.setPrice(product.getPrice());
+            productDTO.setOldPrice(product.getOldPrice());
+            productDTO.setTitle(product.getTitle());
+            productDTO.setImageUrl(product.getImageUrl());
+            getProductResponse.setProductInfoDto(productDTO);
+            return getProductResponse;
+        }
+        catch (Exception ex){
             throw new GetProductException();
         }
-        var product = apiResponse.getData();
-        var getProductResponse = new GetProductResponse();
-        var productDTO = new ProductInfoDTO();
-        productDTO.setId(product.getId());
-        productDTO.setQuantity(product.getQuantity());
-        productDTO.setPrice(product.getPrice());
-        productDTO.setOldPrice(product.getOldPrice());
-        productDTO.setTitle(product.getTitle());
-        productDTO.setImageUrl(product.getImageUrl());
-        getProductResponse.setProductInfoDto(productDTO);
-        return getProductResponse;
     }
 }

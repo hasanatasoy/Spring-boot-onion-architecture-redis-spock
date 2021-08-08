@@ -1,7 +1,7 @@
 package com.trendyol.basket.model;
 
 public class ApiResponse<Data> {
-    private boolean isSuccess;
+    private boolean isSuccess = true;
     private Data data;
     private int statusCode = 200;
     private String message;
