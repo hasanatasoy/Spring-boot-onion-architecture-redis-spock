@@ -10,11 +10,9 @@ import com.trendyol.basket.externalservice.campaign.model.response.GetCampaignRe
 import com.trendyol.basket.externalservice.product.ProductService;
 import com.trendyol.basket.externalservice.product.model.request.GetProductRequest;
 import com.trendyol.basket.manager.BasketManager;
-import com.trendyol.basket.model.request.AddToBasketRequest;
-import com.trendyol.basket.model.request.GetBasketRequest;
-import com.trendyol.basket.model.request.GetBasketsByProductIdRequest;
-import com.trendyol.basket.model.request.UpdateBasketRequest;
+import com.trendyol.basket.model.request.*;
 import com.trendyol.basket.model.response.AddToBasketResponse;
+import com.trendyol.basket.model.response.DeleteItemFromBasketResponse;
 import com.trendyol.basket.model.response.GetBasketResponse;
 import com.trendyol.basket.model.response.UpdateBasketResponse;
 import com.trendyol.basket.services.BasketService;
@@ -123,12 +121,23 @@ public class BasketManagerImpl implements BasketManager {
 
     @Override
     public List<GetBasketResponse> getByProductId(GetBasketsByProductIdRequest getBasketsByProductIdRequest) {
-        //validate request
+        //TODO: validate request
         var baskets = basketService.getByProductId(getBasketsByProductIdRequest.getProductId());
         var basketResponses = baskets.stream()
                 .map(basketDtoConverter::convert)
                 .map(GetBasketResponse::new)
                 .collect(Collectors.toList());
         return basketResponses;
+    }
+
+    @Override
+    public DeleteItemFromBasketResponse delete(DeleteItemFromBasketRequest deleteItemFromBasketRequest) {
+        //TODO: validate request and write unit tests
+        var basket = basketService.deleteItemFromBasket(deleteItemFromBasketRequest.getCustomerId(), deleteItemFromBasketRequest.getProductId());
+        var deleteItemFromBasketResponse = new DeleteItemFromBasketResponse();
+        var getCampaignRequest = prepareGetCampaignRequest(deleteItemFromBasketRequest.getCustomerId(), basket.getProducts());
+        var campaignResponse = campaignService.get(getCampaignRequest);
+        UpdateBasketInfoWithCampaign(campaignResponse);
+        return deleteItemFromBasketResponse;
     }
 }

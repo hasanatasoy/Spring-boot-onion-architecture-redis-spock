@@ -118,4 +118,16 @@ public class BasketServiceImpl implements BasketService {
         });
         return baskets;
     }
+
+    @Override
+    public Basket deleteItemFromBasket(long customerId, long productId) {
+        var optionalBasketsIdsByProductId = basketRepository.findByCustomerId(customerId);
+        if(optionalBasketsIdsByProductId.isEmpty()){
+            throw new BasketNotFoundException();
+        }
+        var basket = optionalBasketsIdsByProductId.get();
+        basket.setProductQuantity(productId, 0);
+        basketRepository.save(basket);
+        return basket;
+    }
 }

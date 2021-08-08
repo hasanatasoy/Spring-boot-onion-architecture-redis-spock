@@ -66,7 +66,13 @@ public class Basket {
         if(optionalProductInfo.isEmpty()){
             throw new ProductNotFoundException();
         }
-        optionalProductInfo.get().setQuantity(quantity);
+        var productInfo = optionalProductInfo.get();
+        if(quantity != 0){
+            productInfo.setQuantity(quantity);
+        }
+        else{
+            products.remove(productInfo);
+        }
         basketInfo.updateSubTotal(products);
     }
 }

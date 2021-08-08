@@ -4,9 +4,11 @@ import com.trendyol.basket.controller.BasketController;
 import com.trendyol.basket.manager.BasketManager;
 import com.trendyol.basket.model.ApiResponse;
 import com.trendyol.basket.model.request.AddToBasketRequest;
+import com.trendyol.basket.model.request.DeleteItemFromBasketRequest;
 import com.trendyol.basket.model.request.GetBasketRequest;
 import com.trendyol.basket.model.request.UpdateBasketRequest;
 import com.trendyol.basket.model.response.AddToBasketResponse;
+import com.trendyol.basket.model.response.DeleteItemFromBasketResponse;
 import com.trendyol.basket.model.response.GetBasketResponse;
 import com.trendyol.basket.model.response.UpdateBasketResponse;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,15 @@ public class BasketRestController implements BasketController {
         return ApiResponse.ApiResponseBuilderWithData
                 .builder()
                 .setData(response)
+                .build();
+    }
+
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    @Override
+    public ApiResponse<DeleteItemFromBasketResponse> delete(@RequestBody DeleteItemFromBasketRequest deleteItemFromBasketRequest) {
+        var response = basketManager.delete(deleteItemFromBasketRequest);
+        return ApiResponse.ApiResponseBuilder
+                .builder()
                 .build();
     }
 }

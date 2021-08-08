@@ -12,4 +12,5 @@ public interface BasketService {
     void addCampaignToBasket(long customerId, String campaignDisplayName, BigDecimal campaignPrice);
     void clearBasketCampaigns(long customerId);
     List<Basket> getByProductId(long productId);
+    Basket deleteItemFromBasket(long customerId, long productId);
 }
