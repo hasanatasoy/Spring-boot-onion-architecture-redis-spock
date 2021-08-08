@@ -8,6 +8,9 @@
 3- Sepet güncelleme işlevi sadece sepette yapılabiliyor ve ürünün adedini arttırma ve azaltma şeklinde kullanılabiliyor<br/>**POST basket/update**&nbsp;&nbsp;(Sepetin ara toplamı hesaplanıyor ve kampanya servisine sorgu atılıyor<br/>***Önemli: Güncellenen ürünün adedi sepetteki toplam adet şeklinde gönderilmeli***<br/>***Önemli2: Sepette 1 adet kalmış ürünler için silme işlevi kullanılmalı***<br/>  
 4- Sepetteki ürünü silebilmek için &nbsp;&nbsp;**POST basket/delete**&nbsp;&nbsp;(Sepetin ara toplamı hesaplanıyor ve kampanya servisine sorgu atılıyor<br/>  
 5- Sepetteki ürünleri çekebilmek için  &nbsp;&nbsp;**POST basket/{customerId}**<br/>  
+6- Kampanya servisine başlangıçta bir kargo kampanyası eklenmeli.&nbsp;&nbsp;**POST campaign/create**<br/>  
+6- Ürün servisi ayağa kaldırıldığında 100 adet ürün rastgele değerler ile ekleniyor.
+
   
 ## Kurulum
 
@@ -32,6 +35,3 @@ docker container run --name rediscik -p 6379:6379 -d redis
 ```
 Postman istekleri repoya dahil edildi
 ```
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
