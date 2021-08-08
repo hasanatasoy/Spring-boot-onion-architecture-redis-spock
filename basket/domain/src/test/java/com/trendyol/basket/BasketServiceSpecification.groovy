@@ -145,11 +145,11 @@ class BasketServiceSpecification extends Specification{
 
     def "Test update: If item to be updated is not in basket then throw ProductNotFoundException"(){
         setup:
-        def customerId = 1L
-        def productId = 1L
-        def productTwoId = 2L
-        def basket = new Basket(customerId,
-                new ProductInfo(productId, "imageUrl", "title", 2, BigDecimal.valueOf(155), BigDecimal.valueOf(155)))
+            def customerId = 1L
+            def productId = 1L
+            def productTwoId = 2L
+            def basket = new Basket(customerId,
+                    new ProductInfo(productId, "imageUrl", "title", 2, BigDecimal.valueOf(155), BigDecimal.valueOf(155)))
             def basketRepository = Mock(BasketRepository) {
                 findByCustomerId(customerId) >> Optional.of(basket)
             }

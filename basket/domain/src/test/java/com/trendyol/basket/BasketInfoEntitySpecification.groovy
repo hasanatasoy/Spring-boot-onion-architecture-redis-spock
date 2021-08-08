@@ -74,15 +74,15 @@ class BasketInfoEntitySpecification extends Specification{
 
     def "Should clear all campaigns from list in basket info"(){
         setup:
-        def productInfos = new ArrayList<ProductInfo>()
-        def productInfo = new ProductInfo(2L, "test", "test2", 2, BigDecimal.valueOf(100), BigDecimal.valueOf(125))
-        productInfos.add(productInfo)
-        def basketInfo = new BasketInfo(productInfos)
-        basketInfo.updateGrandTotalWithCampaign("Campaign", BigDecimal.valueOf(15.99) )
-        when:
-        basketInfo.clearCampaigns()
+            def productInfos = new ArrayList<ProductInfo>()
+            def productInfo = new ProductInfo(2L, "test", "test2", 2, BigDecimal.valueOf(100), BigDecimal.valueOf(125))
+            productInfos.add(productInfo)
+            def basketInfo = new BasketInfo(productInfos)
+            basketInfo.updateGrandTotalWithCampaign("Campaign", BigDecimal.valueOf(15.99) )
+            when:
+            basketInfo.clearCampaigns()
         then:
-        basketInfo.getCampaigns().size() == 0
+            basketInfo.getCampaigns().size() == 0
     }
 
     def "Sub total should be calculated by products"(){
