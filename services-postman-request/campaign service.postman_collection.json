@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "localhost:8080/campaign/create",
+			"name": "Create Campaign",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -34,7 +34,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:8080/campaign/calculate",
+			"name": "Calculate Campaign",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -56,6 +56,45 @@
 					"path": [
 						"calculate"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Campaign",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":1,\r\n    \"name\":\"test\",\r\n    \"threshold\":100.00,\r\n    \"toBeAppliedPrice\":4.99,\r\n    \"actualPrice\":10.00\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/campaign/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"campaign",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Campaigns",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
 			},
 			"response": []

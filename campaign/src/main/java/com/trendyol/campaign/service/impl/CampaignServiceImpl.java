@@ -8,6 +8,7 @@ import com.trendyol.campaign.service.CampaignService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
@@ -59,5 +60,10 @@ public class CampaignServiceImpl implements CampaignService {
         campaign.setActualPrice(actualPrice);
         campaign.setToBeAppliedPrice(toBeAppliedPrice);
         campaignRepository.save(campaign);
+    }
+
+    @Override
+    public List<Campaign> getAll() {
+        return campaignRepository.findAll();
     }
 }

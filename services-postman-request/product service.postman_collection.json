@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "localhost:8080/product/update/price",
+			"name": "Update Price",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -35,7 +35,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:8080/product/update/stock",
+			"name": "Update Stock",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -64,7 +64,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:8080/product/2",
+			"name": "Get Product",
 			"request": {
 				"method": "GET",
 				"header": [],

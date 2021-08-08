@@ -61,4 +61,13 @@ public class CampaignController {
                 .builder()
                 .build();
     }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ApiResponse GetAllCampaign(){
+        var campaigns = campaignService.getAll();
+        return ApiResponse.ApiResponseBuilderWithData
+                .builder()
+                .setData(campaigns)
+                .build();
+    }
 }
