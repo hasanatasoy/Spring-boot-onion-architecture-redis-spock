@@ -39,7 +39,7 @@ public class ProductPriceChangedConsumer implements Consumer<ProductPriceChanged
 
     @Override
     @KafkaListener(topics = "ProductPriceChanged", groupId = "basket",
-            containerFactory = "getProductPriceChangedListenerFactory")
+            containerFactory = "getProductPriceChangedFactory")
     public void consume(ProductPriceChangedMessage productPriceChangedMessage) {
         if(productPriceChangedMessage.getPrice().compareTo(productPriceChangedMessage.getOldPrice()) > 0){
             return;

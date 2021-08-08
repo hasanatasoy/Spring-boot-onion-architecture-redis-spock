@@ -1,7 +1,7 @@
 package com.trendyol.basket.config;
 
-import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
-import com.google.gson.JsonDeserializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import com.trendyol.basket.messaging.model.ProductPriceChangedMessage;
 import com.trendyol.basket.messaging.model.ProductStockChangedMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -25,27 +25,35 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConsumerFactory<String, ProductPriceChangedMessage> priceChangedConsumerFactory() {
+        JsonDeserializer<ProductPriceChangedMessage> jsonDeserializer = new JsonDeserializer<>(ProductPriceChangedMessage.class);
+        jsonDeserializer.setRemoveTypeHeaders(false);
+        jsonDeserializer.addTrustedPackages("*");
+        jsonDeserializer.setUseTypeMapperForKey(true);
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(props);
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), jsonDeserializer);
     }
 
     @Bean
     public ConsumerFactory<String, ProductStockChangedMessage> stockChangedConsumerFactory() {
+        JsonDeserializer<ProductStockChangedMessage> jsonDeserializer = new JsonDeserializer<>(ProductStockChangedMessage.class);
+        jsonDeserializer.setRemoveTypeHeaders(false);
+        jsonDeserializer.addTrustedPackages("*");
+        jsonDeserializer.setUseTypeMapperForKey(true);
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(props);
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), jsonDeserializer);
     }
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, ProductPriceChangedMessage>
-    getProductPriceChangedListenerFactory() {
+    getProductPriceChangedFactory() {
         ConcurrentKafkaListenerContainerFactory<String, ProductPriceChangedMessage> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(priceChangedConsumerFactory());

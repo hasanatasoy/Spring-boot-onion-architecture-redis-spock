@@ -9,9 +9,7 @@ import com.trendyol.basket.model.request.UpdateBasketRequest;
 import com.trendyol.basket.model.response.AddToBasketResponse;
 import com.trendyol.basket.model.response.GetBasketResponse;
 import com.trendyol.basket.model.response.UpdateBasketResponse;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("basket")
@@ -25,7 +23,7 @@ public class BasketRestController implements BasketController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @Override
-    public ApiResponse<AddToBasketResponse> add(AddToBasketRequest addToBasketRequest) {
+    public ApiResponse<AddToBasketResponse> add(@RequestBody AddToBasketRequest addToBasketRequest) {
         var response = basketManager.add(addToBasketRequest);
         return ApiResponse.ApiResponseBuilderWithData
                 .builder()
@@ -35,7 +33,7 @@ public class BasketRestController implements BasketController {
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     @Override
-    public ApiResponse<UpdateBasketResponse> update(UpdateBasketRequest updateBasketRequest) {
+    public ApiResponse<UpdateBasketResponse> update(@RequestBody UpdateBasketRequest updateBasketRequest) {
         var response = basketManager.update(updateBasketRequest);
         return ApiResponse.ApiResponseBuilderWithData
                 .builder()
@@ -45,7 +43,7 @@ public class BasketRestController implements BasketController {
 
     @RequestMapping(value = "{customerId}", method = RequestMethod.GET)
     @Override
-    public ApiResponse<GetBasketResponse> get(long customerId) {
+    public ApiResponse<GetBasketResponse> get(@PathVariable long customerId) {
         var getBasketRequest = new GetBasketRequest(customerId);
         var response = basketManager.get(getBasketRequest);
         return ApiResponse.ApiResponseBuilderWithData
