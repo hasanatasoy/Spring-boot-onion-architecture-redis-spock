@@ -1,0 +1,115 @@
+{
+	"info": {
+		"_postman_id": "ca7a0e21-0b7c-4fae-8560-ab9ff7c6bbd7",
+		"name": "basket service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Delete item from basket",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\":1,\r\n    \"productId\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/basket/delete",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"basket",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add item to basket or initialize basket",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\":1,\r\n    \"productId\":5,\r\n    \"quantity\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/basket/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"basket",
+						"add"
+					]
+				},
+				"description": "if basket exists then adds item to basket\r\n\r\nif basket and product exists then adds one to item quantity\r\n\r\nif basket not exists then creates basket and adds item to basket"
+			},
+			"response": []
+		},
+		{
+			"name": "Update basket item quantity",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\":1,\r\n    \"productId\":1,\r\n    \"quantity\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/basket/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"basket",
+						"update"
+					]
+				},
+				"description": "This request only be used to increase quantity of product in basket\r\n\r\nproduct quantity = 1\r\n\r\n{\r\n    \"customerId\":1,\r\n    \"productId\":1,\r\n    \"quantity\":3\r\n}\r\n\r\nif applied\r\n\r\nproduct quantity = 3"
+			},
+			"response": []
+		},
+		{
+			"name": "Get basket",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8082/basket/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"basket",
+						"1"
+					]
+				},
+				"description": "basket id = customer id"
+			},
+			"response": []
+		}
+	]
+}

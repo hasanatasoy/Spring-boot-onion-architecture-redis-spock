@@ -1,0 +1,64 @@
+{
+	"info": {
+		"_postman_id": "aac6dba0-47b1-45a8-b7f6-886e8ad7289f",
+		"name": "campaign service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/campaign/create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test\",\r\n    \"threshold\":100.00,\r\n    \"toBeAppliedPrice\":4.99,\r\n    \"actualPrice\":10.00\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/campaign/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"campaign",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/campaign/calculate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"basketTotal\":50.00\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost8081/calculate",
+					"protocol": "http",
+					"host": [
+						"localhost8081"
+					],
+					"path": [
+						"calculate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
