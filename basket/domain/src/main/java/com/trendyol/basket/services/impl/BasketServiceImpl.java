@@ -67,7 +67,7 @@ public class BasketServiceImpl implements BasketService {
         BasketsIdsByProductId basketsIdsByProductId;
         if(optBasketIdsByProductId.isPresent()){
             basketsIdsByProductId = optBasketIdsByProductId.get();
-            basketsIdsByProductId.getBasketIds().add(productId);
+            basketsIdsByProductId.getBasketIds().add(customerId);
         }
         else{
             var basketIds = new HashSet<Long>();
