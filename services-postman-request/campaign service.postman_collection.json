@@ -94,7 +94,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "localhost:8081/campaign",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"campaign"
+					]
 				}
 			},
 			"response": []
