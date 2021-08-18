@@ -29,8 +29,6 @@ Sepet servisinde veritabanı olarak Redis kullanılmıştır. Redisi ayağa kald
 docker container run --name rediscik -p 6379:6379 -d redis
 ```
 
-**NOT: Docker compose yapmak isterdim ama planlamayı düzgün yapamadığım için pek araştırmaya vaktim kalmadı.**
-
 ## Kullanım
 
 ```
